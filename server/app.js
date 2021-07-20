@@ -37,4 +37,12 @@ app.post("/api/insert", (req, res) => {
   });
 });
 
+app.delete("/api/delete/:demo_name", (req, res) => {
+  const name = req.params.demo_name;
+  const sqlDelete = "DELETE FROM demo_one WHERE demo_name = ?";
+  db.query(sqlDelete, name, (err, result) => {
+    if (err) console.log(err);
+  });
+});
+
 app.listen(PORT, () => console.log(`🌎 ==> API server now on port ${PORT}!`));

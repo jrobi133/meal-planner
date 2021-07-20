@@ -3,7 +3,7 @@ import "./App.css";
 import Axios from "axios";
 
 function App() {
-  const [demoName, setDemoName] = useState("");
+  const [demo_name, setDemoName] = useState("");
   const [demoDescription, setDemoDescription] = useState("");
   const [demoList, setDemoList] = useState([]);
 
@@ -15,26 +15,33 @@ function App() {
 
   const submitDemo = () => {
     Axios.post("http://localhost:5000/api/insert", {
-      demo_name: demoName,
+      demo_name: demo_name,
       demo_description: demoDescription,
-    }).then(() => {
-      alert("successful insert");
     });
+
+    setDemoList([
+      ...demoList,
+      { demo_name: demo_name, demo_description: demoDescription },
+    ]);
+  };
+
+  const deleteDemo = (demo) => {
+    Axios.delete(`http://localhost:5000/api/delete/${demo}`);
   };
 
   return (
     <div className="App">
       <h1>Crud Application</h1>
       <div className="form">
-        <label>Demo 1:</label>
+        <label>Demo Name:</label>
         <input
           type="text"
-          name="demoName"
+          name="demo_name"
           onChange={(e) => {
             setDemoName(e.target.value);
           }}
         />
-        <label>Demo 2:</label>
+        <label>Demo Description:</label>
         <input
           type="text"
           name="demoDescription"
@@ -47,10 +54,20 @@ function App() {
 
         {demoList.map((val) => {
           return (
-            <h1>
-              Demo Name: {val.demo_name} | Demo Description:
-              {val.demo_description}
-            </h1>
+            <div clannName="card">
+              <h1>{val.demo_name}</h1>
+              <p>{val.demo_description}</p>
+
+              <button
+                onClick={() => {
+                  deleteDemo(val.demo_name);
+                }}
+              >
+                Delete
+              </button>
+              <input type="text" id="updateInput" />
+              <button>Update</button>
+            </div>
           );
         })}
       </div>
