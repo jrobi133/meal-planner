@@ -7,6 +7,8 @@ function App() {
   const [demoDescription, setDemoDescription] = useState("");
   const [demoList, setDemoList] = useState([]);
 
+  const [newDescription, setDescription] = useState("");
+
   useEffect(() => {
     Axios.get("http://localhost:5000/api/get").then((response) => {
       setDemoList(response.data);
@@ -27,6 +29,14 @@ function App() {
 
   const deleteDemo = (demo) => {
     Axios.delete(`http://localhost:5000/api/delete/${demo}`);
+  };
+
+  const updateDemo = (demo_name) => {
+    Axios.put("http://localhost:5000/api/update", {
+      demo_name: demo_name,
+      demo_description: newDescription,
+    });
+    setDescription("");
   };
 
   return (
@@ -65,8 +75,20 @@ function App() {
               >
                 Delete
               </button>
-              <input type="text" id="updateInput" />
-              <button>Update</button>
+              <input
+                type="text"
+                id="updateInput"
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
+              />
+              <button
+                onClick={() => {
+                  updateDemo(val.demo_name);
+                }}
+              >
+                Update
+              </button>
             </div>
           );
         })}

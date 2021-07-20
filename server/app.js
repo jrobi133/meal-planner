@@ -45,4 +45,14 @@ app.delete("/api/delete/:demo_name", (req, res) => {
   });
 });
 
+app.put("/api/update", (req, res) => {
+  const name = req.body.demo_name;
+  const description = req.body.demo_description;
+  const sqlUpdate =
+    "UPDATE demo_one SET demo_description = ? WHERE demo_name = ?";
+  db.query(sqlUpdate, [description, name], (err, result) => {
+    if (err) console.log(err);
+  });
+});
+
 app.listen(PORT, () => console.log(`🌎 ==> API server now on port ${PORT}!`));
